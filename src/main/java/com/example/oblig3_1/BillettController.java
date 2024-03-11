@@ -32,6 +32,15 @@ public class BillettController {
         rep.slettAlleBilletter();
     }
 
+    @GetMapping("/hentEnBillett")
+    public Billett hentEnBillett(int id){return this.rep.hentEnBillett(id);}
+
+    @PostMapping("/endreEnBillett")
+    public void endreEnBillett(Billett billett) {this.rep.endreEnBillett(billett);}
+
+    @PostMapping("/slettEnBillett")
+    public void slettEnBillett(int id){this.rep.slettEnBillett(id);}
+
     @GetMapping("/hentFilmer")
     public List<Film> hentFilmer(){
         List<Film> listFilmer = new ArrayList<>();

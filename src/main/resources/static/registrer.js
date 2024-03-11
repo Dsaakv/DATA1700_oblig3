@@ -89,27 +89,23 @@ function registrerbilett() {
 }
 
 
-function visFilmer(sjanger){
-    const filmGrupper = $("#valgtSjanger").data("filmGrupper");
-    let ut = "<option value=''>Velg Film</option>";
-    filmGrupper[sjanger].forEach(film => {
-        ut+="<option value='"+film.navn+"'>"+film.navn+"</option>";
-    });
-    $("#valgtFilm").html(ut);
-}
-
-
 function formaterFilmer(filmGrupper){
-    let ut = "<select id='valgtFilm' onchange='visFilmer(this.value)'>";
+    let ut = "<select id='valgtFilm'>";
     ut+= "<option value=''>Velg Film</option>";
-    for (const sjanger in filmGrupper ){
-        filmGrupper[sjanger].forEach(film => {
-            ut+="<option value='"+film.navn+"'>"+film.sjanger+": "+film.navn+"</option>";
-        });
+    for (const sjangerGruppe of filmGrupper){
+        for (const film of sjangerGruppe){
+            ut+="<option value='"+film.navn+"'>"+film.navn+"</option>";
+        }
     }
     ut+="</select>";
     $("#filmene").html(ut);
 }
+
+
+$(document).ready(function(){
+    hentAlleFilmer();
+});
+
 
 function hentAlleFilmer(){
     $.get("/hentFilmer", function( filmer ) {
@@ -120,6 +116,7 @@ function hentAlleFilmer(){
             }
             filmGrupper[film.sjanger].push(film);
         });
-        formaterFilmer(filmGrupper);
+        formaterFilmer(Object.values(filmGrupper));
     });
+
 }

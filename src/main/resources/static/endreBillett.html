@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Endre Billett</title>
+    <script src="EndreBillett.js"></script>
+
+    <style>
+
+        nav {
+            margin-bottom: 20px;
+            background-color: #f8f8f8;
+            border: 1px solid #e7e7e7;
+        }
+
+        .navbar-default .navbar-brand,
+        .navbar-default .navbar-nav > li > a {
+            color: #333;
+        }
+
+        .navbar-default .navbar-nav > li > a:hover,
+        .navbar-default .navbar-nav > li > a:focus {
+            color: #000;
+        }
+
+        .navbar-default .navbar-nav > .active > a,
+        .navbar-default .navbar-nav > .active > a:hover,
+        .navbar-default .navbar-nav > .active > a:focus {
+            color: #000;
+            background-color: #e7e7e7;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">Billetter</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="index.html">Hjem</a></li>
+            <li><a href="registrer.html">Registrer</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="container">
+    <h1>Endre Billett</h1>
+    <form class="form">
+        <input type="hidden" id="id" />
+        <div class="form-group">
+            <label>Film</label>
+            <div id="filmene"></div>
+            <span id="filmfeil" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="antall">Antall:</label>
+            <input id="antall" type="number" class="form-control" style="width: 100px;">
+            <span id="feilmeldingantall" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="fornavn">Fornavn:</label>
+            <input id="fornavn" type="text" class="form-control">
+            <span id="feilmeldingfornavn" class="text-danger"></span>
+        </div><div class="form-group">
+        <label for="etternavn">Etternavn:</label>
+        <input id="etternavn" type="text" class="form-control">
+        <span id="feilmeldingetternavn" class="text-danger"></span>
+    </div>
+        <div class="form-group">
+            <label for="telefonnr">Telefonnr:</label>
+            <input id="telefonnr" type="number" class="form-control">
+            <span id="feilmeldingtelefonnr" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="epost">Epost:</label>
+            <input id="epost" type="text" class="form-control">
+            <span id="feilmeldingepost" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="button" value="Endre" class="btn btn-primary" onclick="endreBilletten()" />
+        </div>
+    </form>
+</div>
+</body>
+</html>

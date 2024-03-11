@@ -19,7 +19,14 @@ public class BillettRepository {
 
     public void lagreBillett(Billett innBillett) {
         String sql = "INSERT INTO Billett (film, antall, fornavn, etternavn, telefonnr, epost) VALUES (?, ?, ?, ?, ?, ?)";
-        db.update(sql, innBillett.getFilm(), innBillett.getAntall(), innBillett.getFornavn(), innBillett.getEtternavn(), innBillett.getTelefonnr(), innBillett.getEpost());
+        this.db.update(sql, new Object[]{
+                innBillett.getFilm(),
+                innBillett.getAntall(),
+                innBillett.getFornavn(),
+                innBillett.getEtternavn(),
+                innBillett.getTelefonnr(),
+                innBillett.getEpost()
+        });
     }
 
 
@@ -32,6 +39,24 @@ public class BillettRepository {
     public void slettAlleBilletter(){
         String sql = "DELETE FROM Billett";
         db.update(sql);
+    }
+
+    public Billett hentEnBillett(int id){
+        Object[] param = new Object[]{id};
+        String sql = "SELECT * FROM Billett WHERE id=?";
+        Billett enBillett = (Billett)this.db.queryForObject(sql, param, BeanPropertyRowMapper.newInstance(Billett.class));
+        return enBillett;
+    }
+
+    public void endreEnBillett(Billett billett){
+        String sql = "UPDATE Billett SET film=?, antall=?, fornavn=?, etternavn=?, telefonnr=?, epost=? WHERE id=?";
+        this.db.update(sql, new Object[]{billett.getFilm(), billett.getAntall(), billett.getFornavn(),
+                billett.getEtternavn(), billett.getTelefonnr(), billett.getEpost(), billett.getId()});
+    }
+
+    public void slettEnBillett(int id){
+        String sql = "DELETE FROM Billett WHERE id=?";
+        this.db.update(sql, new Object[]{id});
     }
 
 }
