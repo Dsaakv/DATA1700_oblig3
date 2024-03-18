@@ -1,5 +1,7 @@
 package com.example.oblig3_1;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,15 +20,37 @@ public class BillettController {
     private BillettRepository rep;
 
 
+    private Logger logger = LoggerFactory.getLogger(BillettController.class);
+
+    public boolean validerBillett(Billett billett) {
+        String regexNavn = "[a-zA-ZæøåÆØÅ. \\-]{2,20}";
+        String regexTelefonnr = "\\d{8}";
+        String regexEpost = "\\b[\\w.%-]+@[\\w.-]+\\.[a-zA-Z]{2,4}\\b";
+
+        boolean navnOK = billett.getFornavn().matches(regexNavn);
+        boolean etternavnOK = billett.getEtternavn().matches(regexNavn);
+        boolean telefonnrOK = billett.getTelefonnr().matches(regexTelefonnr);
+        boolean epostOK = billett.getEpost().matches(regexEpost);
+
+        if (navnOK && etternavnOK && telefonnrOK && epostOK && billett.getAntall() > 0) {
+            return true;
+        }
+        logger.error("Validerinsfeil");
+        return false;
+    }
+
 
     @PostMapping("/lagre")
     public void returBillett(Billett innBillett, HttpServletResponse response) throws IOException{
 
-        if(!rep.lagreBillett(innBillett)){
-            response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Feil i DB - prøv igjen senere");
+        if(!validerBillett(innBillett)){
+            response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Feil i Validering - prøv igjen senere");
         }
-        //rep.lagreBillett(innBillett);
-        //return innBillett;
+        else {
+            if (!rep.lagreBillett(innBillett)) {
+                response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Feil i DB - prøv igjen senere");
+            }
+        }
     }
 
     @GetMapping("/hentAlle")
@@ -57,8 +81,14 @@ public class BillettController {
 
     @PostMapping("/endreEnBillett")
     public void endreEnBillett(Billett billett, HttpServletResponse response) throws IOException {
-        if(!rep.endreEnBillett(billett)){
-            response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Feil i DB - prøv igjen senere");
+
+        if(!validerBillett(billett)){
+            response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Feil i Validering - prøv igjen senere");
+        }
+        else {
+            if (!rep.endreEnBillett(billett)) {
+                response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Feil i DB - prøv igjen senere");
+            }
         }
     }
 
@@ -72,15 +102,15 @@ public class BillettController {
     @GetMapping("/hentFilmer")
     public List<Film> hentFilmer(){
         List<Film> listFilmer = new ArrayList<>();
-        listFilmer.add(new Film("Avengers", "Action"));
-        listFilmer.add(new Film("Ringenes herre", "Fantasy"));
-        listFilmer.add(new Film("Titanic", "Romanse"));
-        listFilmer.add(new Film("John wick", "Action"));
-        listFilmer.add(new Film("Taken", "Action"));
-        listFilmer.add(new Film("Narnia", "Fantasy"));
-        listFilmer.add(new Film("Dune", "Fantasy"));
-        listFilmer.add(new Film("Notebook", "Romanse"));
-        listFilmer.add(new Film("La la land", "Romanse"));
+        listFilmer.add(new Film("Avengers"));
+        listFilmer.add(new Film("Ringenes herre"));
+        listFilmer.add(new Film("Titanic"));
+        listFilmer.add(new Film("John wick"));
+        listFilmer.add(new Film("Taken"));
+        listFilmer.add(new Film("Narnia"));
+        listFilmer.add(new Film("Dune"));
+        listFilmer.add(new Film("Notebook"));
+        listFilmer.add(new Film("La la land"));
         return listFilmer;
     }
 }
