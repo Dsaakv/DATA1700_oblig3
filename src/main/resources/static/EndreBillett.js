@@ -27,7 +27,6 @@ function hentAlleFilmer(){
         });
         formaterFilmer(Object.values(filmGrupper));
     });
-
 }
 
 $(function(){
@@ -42,6 +41,9 @@ $(function(){
         $("#telefonnr").val(billett.telefonnr);
         $("#epost").val(billett.epost);
     })
+        .fail(function() {
+            $("#feil").html("Feil i db - prøv igjen senere");
+        });
 });
 
 function endreBilletten() {
@@ -110,11 +112,11 @@ function endreBilletten() {
     }
 
     if (errors.length > 0) {
-        return false; // Prevent form submission if there are errors
+        return false;
     } else  {
         const billett = {
         id: $("#id").val(),
-        film: $("#valgtFilm").find(":selected").text(), // Changed this line
+        film: $("#valgtFilm").find(":selected").text(),
         antall: $("#antall").val(),
         fornavn: $("#fornavn").val(),
         etternavn: $("#etternavn").val(),
@@ -124,5 +126,9 @@ function endreBilletten() {
     $.post("/endreEnBillett", billett,function(){
         window.location.href = 'index.html';
     })
+        .fail(function(jqXHR) {
+            const json = $.parseJSON(jqXHR.responseText);
+            $("#feil").html(json.message);
+        });
 }
 }

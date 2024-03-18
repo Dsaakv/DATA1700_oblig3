@@ -83,6 +83,10 @@ function registrerbilett() {
         };
         $.post("/lagre", bilett, function(){
             window.location.href= "index.html";
+        })
+       .fail(function (jqXHR){
+            const json = $.parseJSON(jqXHR.responseText);
+            $("#feil").html(json.message);
         });
         document.getElementById("bilettForm").reset();
     }

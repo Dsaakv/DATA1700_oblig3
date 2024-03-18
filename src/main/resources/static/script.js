@@ -7,7 +7,11 @@ $(function(){
 function hentAlle() {
     $.get("/hentAlle", function(billetter) {
         formaterBilletter(billetter)
-    });
+    })
+        .fail(function (jqXHR){
+            const json = $.parseJSON(jqXHR.responseText);
+            $("#feil").html(json.message);
+        });
 }
 
 function formaterBilletter(billetter){
@@ -34,7 +38,11 @@ function slettEnBillett(id) {
     const url = "/slettEnBillett?id="+id;
     $.get( url, function(){
         window.location.href = "/";
-    });
+    })
+        .fail(function(jqXHR) {
+            const json = $.parseJSON(jqXHR.responseText);
+            $("#feil").html(json.message);
+        });
 }
 
 
@@ -43,6 +51,10 @@ function slettbiletter(){
     if(ok){
         $.get( "/slettAlle", function() {
             hentAlle();
-        });
+        })
+            .fail(function(jqXHR) {
+                const json = $.parseJSON(jqXHR.responseText);
+                $("#feil").html(json.message);
+            });
     }
 }
